@@ -1,0 +1,1 @@
+print "Max pandigital sum in a**b for a,b < 100:",max([sum(  [int(x) for x in str(a**b)]  ) for a in xrange(1,100) for b in xrange(1,100)])
