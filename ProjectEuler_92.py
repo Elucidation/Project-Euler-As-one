@@ -1,44 +1,39 @@
 from numpy import zeros
 
-maxN = int(10e6) 
-data = zeros(9*9*7+1) # biggest square is 9^2 * 7 , array starts at zero so +1 to that
-data[1] = 1
-data[89] = 89
+squares = [x*x for x in xrange(10)]
+def get1or89(n):
+	while n != 89 and n != 1:
+		n = sum(squares[x] for x in map(int, str(n)))
+	return n
 
-sums = [x*x for x in xrange(10)]
-print sums
+last = {0:1}
+for i in xrange(7): # number of digits
+	next = {}
+	for (tot, cnt) in last.iteritems():
+		for v in squares:
+			ntot = tot + v
+			if next.has_key(ntot):
+				next[ntot] += cnt
+			else:
+				next[ntot] = cnt
+	last = next
 
-def next(n):
-	t = 0
-	while n:
-		# t += (n%10)*(n%10)
-		t += sums[n%10]
-		n /= 10
-	return t
-	# return sum([int(x)*int(x) for x in str(n)])
+fin = {1:0, 89:0}
+del last[0] # causes get1or89 to infinite loop
+for (k, v) in last.iteritems():
+	fin[get1or89(k)] += v
 
-for k in xrange(1,9*9*7+1):
-	n = k
-	while data[n] == 0:
-		n = next(n)
-	data[k] = data[n]
+print fin
+print "Numbers under 10e6 arriving at 89: %d" % fin[89]
 
-print "Data store loaded. count(data == 89) = %g" % (sum(data==89)) # should be 486
-
-
-tot = 0
-for n in xrange(1,maxN+1):
-	if data[next(n)] == 89:
-		tot += 1
-	if n % 1e5 == 0:
-		print "on n=%g, total so far = %d" % (n,tot)
-
-print "Numbers under %d arriving at 89: %d" % (maxN,tot)
+# Fastest, based off of jackdied's solution
+# {1: 1418853, 89: 8581146}
+# Numbers under 10e6 arriving at 89: 8581146
+# [Finished in 0.2s]
 
 # Faster
 # Numbers under 10000000 arriving at 89: 8581146
 # [Finished in 24.7s]
-
 
 # Slow version
 # on 9900000...
