@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Problem 39
 # Two equations, trying to find p <= 1000 with most solutions (sides of int length)
 # a + b + c = p
@@ -40,3 +41,19 @@ print "Best p = %g yields %g solutions" % (best,bestN)
 # p[840]=9
 # Best p = 840 yields 9 solutions
 # [Finished in 0.2s]
+=======
+
+
+bestN = (None,0)
+for p in xrange(0,1000+1):
+	n = 0
+	for c in xrange(1,p):
+		for a in xrange(1,p-c+1):
+			for b in xrange(a,p-c-a+1):
+				if a+b+c == p and a*a+b*b == c*c:
+					n += 1
+	if n > bestN[1]:
+		bestN = (p,n)
+		print "New best for p = %d, yielding %d solutions." % (p,n)
+print "Best solution found with p = %d, yielding %d solutions." % bestN
+>>>>>>> Solution for 39 & 92 (92 slow)
